@@ -188,6 +188,7 @@ const columns = [
   { title: '头像', key: 'avatar', width: 64 },
   { title: '用户名', dataIndex: 'username', key: 'username' },
   { title: '昵称', dataIndex: 'nickname', key: 'nickname' },
+  { title: '应用ID', dataIndex: 'appId', key: 'appId' },
   { title: '手机号', dataIndex: 'phone', key: 'phone' },
   { title: '邮箱', dataIndex: 'email', key: 'email' },
   { title: '状态', key: 'status', width: 100 },
@@ -199,7 +200,7 @@ const columns = [
     customRender: ({ text }: any) =>
       text ? new Date(text).toLocaleString('zh-CN') : '-',
   },
-  { title: '操作', key: 'action', width: 280, fixed: 'right' },
+  { title: '操作', key: 'action', width: 280, fixed: 'right' as const },
 ]
 
 // -----------------------------------------------------------------------
