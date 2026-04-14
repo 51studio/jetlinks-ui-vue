@@ -58,7 +58,7 @@
 
 <script setup>
 import { handleData } from './data'
-import { queryPermission_api } from '@authentication-manager-ui/api/system/permission'
+import { getPermission_api } from '@authentication-manager-ui/api/system/permission'
 import { useI18n } from 'vue-i18n';
 
 const { t: $t } = useI18n();
@@ -184,7 +184,7 @@ const handleSearch = () => {
   //   params.terms = [{ column: 'name$like', value: `%${e}%` }]
   // }
   loading.value = true;
-  queryPermission_api(params).then((resp) => {
+  getPermission_api(params).then((resp) => {
     if (resp.success) {
       sourceList.value = resp.result || []
       !props.value?.length && initializePermissions(props.selectedInitType)
