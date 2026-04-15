@@ -21,11 +21,11 @@
             <a-select-option value="share">分享</a-select-option>
           </a-select>
         </a-col>
-        <a-col :span="4">
+        <a-col :span="6">
           <a-button type="primary" @click="loadData">搜索</a-button>
           <a-button style="margin-left: 8px" @click="handleReset">重置</a-button>
         </a-col>
-        <a-col :span="14" style="text-align: right">
+        <a-col :span="12" style="text-align: right">
           <a-button @click="loadData">
             <template #icon><ReloadOutlined /></template>
             刷新
@@ -40,13 +40,14 @@
       :data-source="deviceList"
       :loading="loading"
       :pagination="false"
+      :scroll="{ x: 'max-content' }"
       row-key="id"
       size="small"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'relationType'">
-          <a-tag :color="RELATION_TYPE_COLOR[record.relationType]">
-            {{ RELATION_TYPE_LABEL[record.relationType] || record.relationType }}
+          <a-tag :color="RELATION_TYPE_COLOR[getRelationTypeValue(record.relationType)]">
+            {{ getRelationTypeText(record.relationType) }}
           </a-tag>
         </template>
         <template v-else-if="column.key === 'bindTime'">
@@ -86,6 +87,12 @@ const RELATION_TYPE_COLOR: Record<string, string> = {
   share: 'green',
 }
 
+const getRelationTypeValue = (rt: any) =>
+  typeof rt === 'object' && rt !== null ? rt.value : rt
+
+const getRelationTypeText = (rt: any) =>
+  typeof rt === 'object' && rt !== null ? rt.text : (RELATION_TYPE_LABEL[rt] || rt)
+
 const props = defineProps<{
   user: any
 }>()
@@ -100,7 +107,7 @@ const filterType = ref<string | undefined>(undefined)
 const columns = [
   { title: '设备ID', dataIndex: 'deviceId', key: 'deviceId', width: 160 },
   { title: '设备名称', dataIndex: 'deviceName', key: 'deviceName' },
-  { title: '产品ID', dataIndex: 'productId', key: 'productId', width: 150 },
+  { title: '产品ID', dataIndex: 'productId', key: 'productId', width: 150, customCell: () => ({ style: { whiteSpace: 'nowrap' } }) },
   { title: '关联类型', key: 'relationType', width: 90 },
   {
     title: '操作人 ID',
@@ -109,7 +116,7 @@ const columns = [
     width: 180,
     customRender: ({ text }: any) => text || '-',
   },
-  { title: '备注', dataIndex: 'description', key: 'description' },
+  { title: '备注', dataIndex: 'description', key: 'description', ellipsis: true, minWidth: 200 },
   { title: '关联时间', key: 'bindTime', width: 170 },
   { title: '操作', key: 'action', width: 70, fixed: 'right' },
 ]
